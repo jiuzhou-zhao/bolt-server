@@ -222,7 +222,7 @@
 // assets/js/uikit.min.js
 // DO NOT EDIT!
 
-package webb
+package webs
 
 import (
 	"bytes"
