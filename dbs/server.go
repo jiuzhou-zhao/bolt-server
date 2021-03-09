@@ -1,4 +1,4 @@
-package webs
+package dbs
 
 import (
 	"encoding/json"

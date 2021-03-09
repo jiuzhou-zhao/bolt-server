@@ -6,24 +6,24 @@ import (
 
 	"github.com/boltdb/bolt"
 	"github.com/gin-gonic/gin"
-	"github.com/jiuzhou-zhao/bolt-server/webs"
+	"github.com/jiuzhou-zhao/bolt-server/dbs"
 )
 
 var _dbName string
 
 func GetBoltDB() *bolt.DB {
-	s := webs.GetServer()
+	s := dbs.GetServer()
 	if _dbName != "" {
 		db := s.GetBoltDBHandler(_dbName)
 		if db != nil {
 			return db
 		}
 	}
-	dbs := s.ListDBs()
-	if len(dbs) == 0 {
+	dbNames := s.ListDBs()
+	if len(dbNames) == 0 {
 		return nil
 	}
-	_dbName = dbs[0]
+	_dbName = dbNames[0]
 	return s.GetBoltDBHandler(_dbName)
 }
 
@@ -96,7 +96,6 @@ func DeleteKey(c *gin.Context) {
 
 	_ = db.Update(func(tx *bolt.Tx) error {
 		b, err := tx.CreateBucketIfNotExists([]byte(c.PostForm("bucket")))
-		b = b
 		if err != nil {
 
 			c.String(200, "error no such bucket | n")
@@ -132,9 +131,7 @@ func Put(c *gin.Context) {
 
 	_ = db.Update(func(tx *bolt.Tx) error {
 		b, err := tx.CreateBucketIfNotExists([]byte(c.PostForm("bucket")))
-		b = b
 		if err != nil {
-
 			c.String(200, "error  creating bucket | n")
 			return fmt.Errorf("create bucket: %s", err)
 		}

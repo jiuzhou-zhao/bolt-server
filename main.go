@@ -13,11 +13,9 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/jiuzhou-zhao/bolt-server/dbs"
 	"github.com/jiuzhou-zhao/bolt-server/webb"
-	"github.com/jiuzhou-zhao/bolt-server/webs"
 )
-
-const version = "v0.0.0"
 
 func main() {
 	// OK, we should be ready to define/run assets server safely.
@@ -29,7 +27,7 @@ func main() {
 	})
 
 	webb.Register(r)
-	webs.Register(r)
+	dbs.Register(r)
 
 	_ = r.Run(":12311")
 }
