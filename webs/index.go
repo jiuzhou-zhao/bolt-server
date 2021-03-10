@@ -9,22 +9,24 @@ import (
 	"github.com/jiuzhou-zhao/bolt-server/dbs"
 )
 
-var _dbName string
+var _db *bolt.DB
 
-func GetBoltDB() *bolt.DB {
+func GetNewestBoltDB() *bolt.DB {
 	s := dbs.GetServer()
-	if _dbName != "" {
-		db := s.GetBoltDBHandler(_dbName)
-		if db != nil {
-			return db
-		}
-	}
 	dbNames := s.ListDBs()
 	if len(dbNames) == 0 {
 		return nil
 	}
-	_dbName = dbNames[0]
-	return s.GetBoltDBHandler(_dbName)
+	return s.GetBoltDBHandler(dbNames[0])
+}
+
+func GetBoltDB() *bolt.DB {
+	db := GetNewestBoltDB()
+	if db != nil {
+		_db = db
+		return db
+	}
+	return _db
 }
 
 func Index(c *gin.Context) {
